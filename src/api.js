@@ -1,7 +1,18 @@
 import axios from 'axios';
 
+const getBaseURL = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  // If running in production / on Vercel, guarantee it never falls back to localhost
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    if (!envUrl || envUrl.includes('localhost')) {
+      return 'https://backend-jisn.onrender.com/api';
+    }
+  }
+  return envUrl || 'https://backend-jisn.onrender.com/api';
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://backend-jisn.onrender.com/api',
+  baseURL: getBaseURL(),
 });
 
 export const inr = (n) =>
